@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Release.Namespace }}
+  labels:
+    tenant: {{ .Release.Namespace }}
+  annotations:
+    # ns가 먼저 만들어져야 나머지가 들어감
+    argocd.argoproj.io/sync-wave: "-1"

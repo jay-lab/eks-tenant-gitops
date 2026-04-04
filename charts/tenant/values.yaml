@@ -1,0 +1,19 @@
+# 기본값. 테넌트별로 바꿀 값만 tenants/<name>/tenant.yaml 에 적으면 됨
+# 테넌트 이름 = namespace 이름 = 디렉터리 이름 (Release.Namespace로 받음)
+
+quota:
+  cpu: "2"
+  memory: 4Gi
+  pods: "20"
+
+app:
+  enabled: true
+  image: nginxinc/nginx-unprivileged:1.27-alpine
+  replicas: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi

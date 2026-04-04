@@ -1,0 +1,5 @@
+apiVersion: v2
+name: tenant
+description: tenant 1개 = namespace + quota + networkpolicy + 샘플앱
+type: application
+version: 0.1.0
