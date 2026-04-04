@@ -1,0 +1,14 @@
+# 같은 namespace 안에서 오는 트래픽만 허용 = 다른 테넌트에서는 못 들어옴
+# vpc-cni enableNetworkPolicy 켜져 있어야 실제로 적용됨 (terraform/eks.tf)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: same-namespace-only
+  namespace: {{ .Release.Namespace }}
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector: {}
