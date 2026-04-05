@@ -17,6 +17,10 @@ module "eks" {
     eks-pod-identity-agent = {}
     vpc-cni = {
       before_compute = true
+      # 이거 안 켜면 NetworkPolicy 만들어도 아무 효과 없음
+      configuration_values = jsonencode({
+        enableNetworkPolicy = "true"
+      })
     }
   }
 
