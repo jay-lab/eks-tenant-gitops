@@ -1,0 +1,7 @@
+quota:
+  cpu: "1"
+  memory: 2Gi
+  pods: "10"
+
+app:
+  replicas: 2
