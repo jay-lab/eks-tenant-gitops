@@ -1,0 +1,40 @@
+# tenants/<name>/tenant.yaml 파일 하나 = Application 하나
+# 디렉터리 지우면 Application도 지워지고, finalizer 때문에 안의 리소스도 같이 정리됨
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: tenants
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: https://github.com/jay-lab/eks-tenant-gitops.git
+        revision: main
+        files:
+          - path: "tenants/*/tenant.yaml"
+  template:
+    metadata:
+      name: "tenant-{{ .path.basename }}"
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+      labels:
+        tenant: "{{ .path.basename }}"
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/jay-lab/eks-tenant-gitops.git
+        targetRevision: main
+        path: charts/tenant
+        helm:
+          releaseName: "{{ .path.basename }}"
+          valueFiles:
+            - "../../tenants/{{ .path.basename }}/tenant.yaml"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{ .path.basename }}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
