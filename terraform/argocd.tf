@@ -42,6 +42,8 @@ resource "helm_release" "argocd_root_app" {
         platform = {
           namespace = "argocd"
           project   = "default"
+          # destroy 때 root app 지우면 NodePool/테넌트까지 같이 지워지게
+          finalizers = ["resources-finalizer.argocd.argoproj.io"]
           source = {
             repoURL        = var.gitops_repo_url
             targetRevision = var.gitops_revision
